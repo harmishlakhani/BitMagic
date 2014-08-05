@@ -3,8 +3,9 @@
  * 
  * Explanation : 
  * 		MSB of -ve number is 1 and +ve number is 0.
- * 		if we XOR both numbers then MSB of result is 0 if both are same
- * 													 1 if both are different.
+ * 		if we XOR both numbers then MSB of result is 
+ * 			0 if both are same
+ * 			1 if both are different.
  * 		MSB is 1 means that number is negative (number < 0 = true).
  */
 package com.github;
