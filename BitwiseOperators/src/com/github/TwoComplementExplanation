@@ -1,0 +1,49 @@
+Java integers are of 32 bits, and always signed. This means, the most significant bit (MSB) works as the sign bit. The integer represented by an int is nothing but the weighted sum of the bits. The weights are assigned as follows:
+
+Bit#    Weight
+31      -2^31
+30       2^30
+29       2^29
+...      ...
+2        2^2
+1        2^1
+0        2^0
+Note that the weight of the MSB is negative (the largest possible negative actually), so when this bit is on, the whole number (the weighted sum) becomes negative.
+
+Let's simulate it with 4-bit numbers:
+
+Binary    Weighted sum            Integer value
+0000       0 + 0 + 0 + 0           0
+0001       0 + 0 + 0 + 2^0         1
+0010       0 + 0 + 2^1 + 0         2
+0011       0 + 0 + 2^1 + 2^0       3
+0100       0 + 2^2 + 0 + 0         4
+0101       0 + 2^2 + 0 + 2^0       5
+0110       0 + 2^2 + 2^1 + 0       6
+0111       0 + 2^2 + 2^1 + 2^0     7 -> the most positive value
+1000      -2^3 + 0 + 0 + 0        -8 -> the most negative value
+1001      -2^3 + 0 + 0 + 2^0      -7
+1010      -2^3 + 0 + 2^1 + 0      -6
+1011      -2^3 + 0 + 2^1 + 2^0    -5
+1100      -2^3 + 2^2 + 0 + 0      -4
+1101      -2^3 + 2^2 + 0 + 2^0    -3
+1110      -2^3 + 2^2 + 2^1 + 0    -2
+1111      -2^3 + 2^2 + 2^1 + 2^0  -1
+So, the two's complement thing is not an exclusive scheme for representing negative integers, rather we can say that the binary representation of integers are always the same, we just negate the weight of the most significant bit. And that bit determines the sign of the integer.
+
+In C, there is a keyword unsigned (not available in java), which can be used for declaring unsigned int x;. In the unsigned integers, the weight of the MSB is positive (2^31) rather then being negative. In that case the range of an unsigned int is 0 to 2^32 - 1, where an int has range -2^31 to 2^31 - 1.
+
+From another point of view, if you consider the two's complement of x as ~x + 1 (NOT x plus one), here's the explanation:
+
+For any x, ~x is just the bitwise inverse of x, so wherever x has a 1-bit, ~x will have a 0-bit there (and vice versa). So, if you add these up, there will be no carry in the addition and the sum will be just an integer every bit of which is 1.
+
+For 32-bit integers:
+
+x + ~x = 1111 1111 1111 1111 1111 1111 1111 1111
+x + ~x + 1 =   1111 1111 1111 1111 1111 1111 1111 1111 + 1
+           = 1 0000 0000 0000 0000 0000 0000 0000 0000
+The leftmost 1-bit will simply be discarded, because it doesn't fit in 32-bits (integer overflow). So,
+
+x + ~x + 1 = 0
+-x = ~x + 1
+So you can see that the negative x can be represented by ~x + 1, which we call the two's complement of x.
